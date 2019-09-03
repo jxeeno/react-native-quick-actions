@@ -104,12 +104,16 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
             intent.setAction(ACTION_SHORTCUT);
             intent.putExtra(SHORTCUT_ITEM, item.toPersistableBundle());
             
-            string shortcutId = "id" + i;
-            if ( item.userInfo && item.userInfo.url ) {
-                shortcutId = item.userInfo.url;
+            String shortcutId = "id" + i;
+            if ( item.userInfo != null ) {
+                WritableMap ui = item.userInfo.toWritableMap();
+                String url = ui.getString("url");
+                if ( url != null ) {
+                    shortcutId = url;
+                }
             }
 
-            shortcuts.add(new ShortcutInfo.Builder(context, "id" + i)
+            shortcuts.add(new ShortcutInfo.Builder(context, shortcutId)
                     .setShortLabel(item.title)
                     .setLongLabel(item.title)
                     .setIcon(Icon.createWithResource(context, iconResId))
