@@ -95,7 +95,9 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
         Context context = getReactApplicationContext();
         List<ShortcutInfo> shortcuts = new ArrayList<>(items.size());
 
-        for (int i = 0; i < items.size(); i++) {
+        ShortcutManager shortcutManager = getReactApplicationContext().getSystemService(ShortcutManager.class);
+
+        for (int i = 0; i < items.size() && i < shortcutManager.getMaxShortcutCountPerActivity(); i++) {
             ShortcutItem item = ShortcutItem.fromReadableMap(items.getMap(i));
 
             int iconResId = context.getResources()
@@ -121,7 +123,7 @@ class AppShortcutsModule extends ReactContextBaseJavaModule {
                     .build());
         }
 
-        getReactApplicationContext().getSystemService(ShortcutManager.class).setDynamicShortcuts(shortcuts);
+        shortcutManager.setDynamicShortcuts(shortcuts);
     }
 
     @ReactMethod
